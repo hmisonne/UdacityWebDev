@@ -43,7 +43,6 @@ class ShowForm(FlaskForm):
     )
 
 def custom_validator(form, field):
-    print(field.data[0])
     if (field.data[0],field.data[0]) not in choicesGenre:
     # # raise ValidationError('Valid enums are %s' % ([choice.value for choice in Genre]))
         raise ValidationError('Not Valid enums ')
