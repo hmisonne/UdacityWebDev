@@ -14,7 +14,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from flask_wtf.csrf import CsrfProtect
-
+from datetime import datetime
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -70,6 +70,31 @@ class Artist(db.Model):
     website = db.Column(db.String(500))
     shows = db.relationship('Show', backref='artist', lazy=True)
 
+    def get_show_history(self):
+      current_date = datetime.today().date()
+      past_shows_raw = Show.query.filter(Show.artist_id == self.id, Show.start_time < current_date).all()
+      upcoming_shows_raw = Show.query.filter(Show.artist_id == self.id, Show.start_time >= current_date).all()
+      past_shows = []
+      upcoming_shows = []
+      for show in past_shows_raw:
+        past_shows.append(show.get_show_per_artist())
+      for show in upcoming_shows_raw:
+        upcoming_shows.append(show.get_show_per_artist())
+
+      artist_show_history = {"id": self.id, 
+      "name": self.name, 
+      "genres": self.genres,
+      "city": self.city,
+      "state": self.state,
+      "phone": self.phone,
+      "seeking_venue": self.seeking_venue,
+      "image_link": self.image_link,
+      "past_shows": past_shows,
+      "upcoming_shows": [],
+      "past_shows_count": len(past_shows),
+      "upcoming_shows_count": len(upcoming_shows)}
+      return artist_show_history
+
 class Show(db.Model):
     __tablename__ = 'Show'
     id = db.Column(db.Integer, primary_key=True)
@@ -87,6 +112,14 @@ class Show(db.Model):
           "artist_name": Artist.query.get(self.artist_id).name,
           "artist_image_link": Artist.query.get(self.artist_id).image_link,
           "start_time": self.start_time}
+
+    def get_show_per_artist(self):
+      return {
+            "venue_id": self.venue_id,
+            "venue_name": Venue.query.get(self.venue_id).name,
+            "venue_image_link": Venue.query.get(self.venue_id).image_link,
+            "start_time": self.start_time
+            }
 
 #----------------------------------------------------------------------------#
 # Filters.
@@ -395,7 +428,8 @@ def show_artist(artist_id):
   #   "upcoming_shows_count": 3,
   # }
   # data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
-  data = Artist.query.all()
+  artist = Artist.query.get(artist_id)
+  data = artist.get_show_history()
   return render_template('pages/show_artist.html', artist=data)
 
 #  Update
@@ -463,12 +497,12 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
   form = ArtistForm()
-  result = Artist.query.filter_by(name=form.name.data).first()
+  result = Artist.query.filter_by(name=form.name.data.capitalize()).first()
     # Check for duplicates
   if result != None:
     flash('Artist ' + request.form['name'] + ' already exists, please choose a different name.')
   elif form.validate_on_submit():
-    newArtist = Artist(name=form.name.data,
+    newArtist = Artist(name=form.name.data.capitalize(),
       genres=form.genres.data,
       city = form.city.data,
       state = form.state.data,
