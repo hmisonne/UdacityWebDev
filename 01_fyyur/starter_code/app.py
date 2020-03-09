@@ -68,22 +68,29 @@ def venues():
     data.append(record)
   return render_template('pages/venues.html', areas=data);
 
-@app.route('/venues/search', methods=['POST'])
+@app.route('/venues/search', methods=['POST','GET'])
 def search_venues():
   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
   # seach for Hop should return "The Musical Hop".
   # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
-  response={
-    "count": 1,
-    "data": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
+
+  search_term = request.args.get('search_term')
+  venues = Venue.query.filter(func.lower(Venue.name).contains(search_term.lower())).all()
+  data = []
+  for venue in venues:
+    new_data = {
+    "id": venue.id,
+    "name": venue.name,
+    "num_upcoming_shows": venue.get_venue_history()['upcoming_shows_count'],
+    }
+    data.append(new_data)
+
+  response = {
+  "count": len(data),
+  "data": data
   }
-  # response =
-  # data = Venue.query.filter(Venue.name.contains(search_string)) 
-  return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
+
+  return render_template('pages/search_venues.html', results=response, search_term=request.args.get('search_term', ''))
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
@@ -151,16 +158,8 @@ def search_artists():
   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
   # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
   # search for "band" should return "The Wild Sax Band".
-  response={
-    "count": 1,
-    "data": [{
-      "id": 4,
-      "name": "Guns N Petals",
-      "num_upcoming_shows": 0,
-    }]
-  }
-  # form = ArtistSeachForm()
-  artists = Artist.query.filter(Artist.name.contains(request.args.get('search_term'))).all()
+
+  artists = Artist.query.filter(func.lower(Artist.name).contains(request.args.get('search_term').lower())).all()
   data = []
   for artist in artists:
     new_data = {
@@ -174,8 +173,7 @@ def search_artists():
   "count": len(data),
   "data": data
   }
-  # print('THIS IS',responseA)
-  return render_template('pages/search_artists.html', results=response, search_term=request.form.get('search_term', ''))
+  return render_template('pages/search_artists.html', results=response, search_term=request.args.get('search_term', ''))
 
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
