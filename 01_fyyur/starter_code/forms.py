@@ -2,7 +2,7 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
 # from FlaskForm import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired, AnyOf, URL, ValidationError, Length
 from enums import State, Genre
 
@@ -107,5 +107,13 @@ class ArtistForm(FlaskForm):
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
     )
+    seeking_venue = BooleanField(
+        # TODO implement enum restriction
+        'seeking_venue'
+    )
+    seeking_description = StringField(
+        # TODO implement enum restriction
+        'seeking_description'
+    ) 
 
 # TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM

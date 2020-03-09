@@ -62,6 +62,12 @@
                   name="search_term"
                   placeholder="Find a venue"
                   aria-label="Search">
+                 <input class="form-control"
+                  type="search"
+                  name="search_term_location"
+                  placeholder="Find a venue by city, state"
+                  aria-label="Search"
+                  id = "search_location">
               </form>
               {% endif %}
               {% if (request.endpoint == 'artists') or
@@ -71,9 +77,17 @@
                 <input class="form-control"
                   type="search"
                   name="search_term"
-                  placeholder="Find an artist"
+                  placeholder="Find an artist by name"
                   aria-label="Search"
                   id = "search-artist">
+                </form>
+              <form class="search" method="get" action="/artists/search_bylocation">
+                <input class="form-control"
+                  type="search"
+                  name="search_term_location"
+                  placeholder="Find an artist by city, state"
+                  aria-label="Search"
+                  id = "search_location">
               </form>
               {% endif %}
             </li>

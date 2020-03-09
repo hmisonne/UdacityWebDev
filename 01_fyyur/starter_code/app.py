@@ -15,7 +15,7 @@ from flask_wtf import Form
 from forms import *
 from flask_wtf.csrf import CsrfProtect
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func, desc
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -149,7 +149,7 @@ def delete_venue(venue_id):
 @app.route('/artists')
 def artists():
   # TODO: replace with real data returned from querying the database
-  data = Artist.query.all()
+  data = Artist.query.order_by(desc(Artist.id)).limit(10)
 
   return render_template('pages/artists.html', artists=data)
 
@@ -158,8 +158,9 @@ def search_artists():
   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
   # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
   # search for "band" should return "The Wild Sax Band".
-
-  artists = Artist.query.filter(func.lower(Artist.name).contains(request.args.get('search_term').lower())).all()
+  name_search = request.args.get('search_term')
+  artists = Artist.query.filter(func.lower(Artist.name).contains(name_search.lower())).all()
+  
   data = []
   for artist in artists:
     new_data = {
@@ -175,6 +176,26 @@ def search_artists():
   }
   return render_template('pages/search_artists.html', results=response, search_term=request.args.get('search_term', ''))
 
+@app.route('/artists/search_bylocation', methods=['POST', 'GET'])
+def search_artists_bylocation():
+  location_search = request.args.get('search_term_location')
+  artists = Artist.query.filter(func.lower(Artist.city).contains(location_search.lower())).all()
+  
+  data = []
+  for artist in artists:
+    new_data = {
+    "id": artist.id,
+    "name": artist.name,
+    "num_upcoming_shows": artist.get_show_history()['upcoming_shows_count'],
+    }
+    data.append(new_data)
+
+  response = {
+  "count": len(data),
+  "data": data
+  }
+  return render_template('pages/search_artists.html', results=response, search_term=request.args.get('search_term_location', ''))
+
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
   # shows the venue page with the given venue_id
@@ -187,27 +208,27 @@ def show_artist(artist_id):
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
   form = ArtistForm()
-  artist={
-    "id": 4,
-    "name": "Guns N Petals",
-    "genres": ["Rock n Roll"],
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "326-123-5000",
-    "website": "https://www.gunsnpetalsband.com",
-    "facebook_link": "https://www.facebook.com/GunsNPetals",
-    "seeking_venue": True,
-    "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
-  }
-  # TODO: populate form with fields from artist with ID <artist_id>
+  artist = Artist.query.get(artist_id)
+
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
   # TODO: take values from the form submitted, and update existing
   # artist record with ID <artist_id> using the new attributes
+  form = ArtistForm()
+  artist = Artist.query.get(artist_id)
+  artist.name = form.name.data.capitalize()
+  artist.genres = form.genres.data
+  artist.city = form.city.data
+  artist.state = form.state.data
+  artist.phone = form.phone.data
+  artist.image_link = form.image_link.data
+  artist.facebook_link = form.facebook_link.data
+  artist.seeking_venue = form.seeking_venue.data
+  artist.seeking_description = form.seeking_description.data
 
+  db.session.commit()
   return redirect(url_for('show_artist', artist_id=artist_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
@@ -277,7 +298,8 @@ def shows():
   # displays list of shows at /shows
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
-  shows = Show.query.all()
+  # shows = Show.query.all()
+  shows = Show.query.order_by(desc(Show.id)).limit(10)
   data = [show.get_show() for show in shows]
   return render_template('pages/shows.html', shows=data)
 
