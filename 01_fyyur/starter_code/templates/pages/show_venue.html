@@ -90,7 +90,7 @@
 	console.log(venue_id)
 
 	fetch('/venues/' + venue_id + '/delete', {
-		method: "DELETE",
+		method: "GET",
 	})
 	.then(function(){
 		window.location.href = '/';
@@ -102,22 +102,3 @@
 
 </script>
 {% endblock %}
-
-<!-- 	document.getElementById('delete_btn').onclick = function(e) {
-	console.log(e)
-	const venue_id = e.target.dataset['id'];
-	fetch('/venues/' + venue_id + '/delete', {
-		method: 'DELETE',
-		headers: {
-          'Content-Type': 'application/json',
-          redirect: true
-        },
-        body: JSON.stringify({id: venue_id})
-
-	})
-	.then(res => {
-		console.log(res)
-	}).then(setTimeout(function(){
-		window.location.href = '/venues'
-	}, 1000))
-} -->
