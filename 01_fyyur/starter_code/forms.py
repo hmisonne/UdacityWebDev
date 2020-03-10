@@ -79,6 +79,14 @@ class VenueForm(FlaskForm):
         'facebook_link', validators=[URL()]
 
     )
+    seeking_talent = BooleanField(
+        # TODO implement enum restriction
+        'seeking_talent'
+    )
+    seeking_description = StringField(
+        # TODO implement enum restriction
+        'seeking_description'
+    ) 
 
 class ArtistForm(FlaskForm):
     name = StringField(

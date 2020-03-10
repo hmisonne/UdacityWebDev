@@ -42,6 +42,7 @@ class Venue(db.Model):
         "website": self.website,
         "facebook_link": self.facebook_link,
         "seeking_talent": self.seeking_talent,
+        "seeking_description": self.seeking_description,
         "image_link": self.image_link,
         "past_shows": past_shows,
         "upcoming_shows": upcoming_shows,

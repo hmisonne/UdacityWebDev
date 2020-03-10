@@ -6,6 +6,7 @@
 		<h1 class="monospace">
 			{{ venue.name }}
 		</h1>
+		<a href="/venues/{{ venue.id }}/edit">Edit</a>
 		<p class="subtitle">
 			ID: {{ venue.id }}
 		</p>
@@ -43,7 +44,9 @@
 		{% endif %}
 	</div>
 	<div class="col-sm-6">
+		{% if venue.image_link is not none %}
 		<img src="{{ venue.image_link }}" alt="Venue Image" />
+		{% endif %}
 	</div>
 </div>
 <section>
@@ -66,7 +69,9 @@
 		{%for show in venue.past_shows %}
 		<div class="col-sm-4">
 			<div class="tile tile-show">
+				{% if show.artist_image_link is not none %}
 				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
+				{% endif %}
 				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
 				<h6>{{ show.start_time|datetime('full') }}</h6>
 			</div>
@@ -75,5 +80,44 @@
 	</div>
 </section>
 
+
+<button class="btn btn-danger" id='delete_btn' data-id = "{{venue.id}}">Delete</button>
+<script>
+	const delete_btn = document.getElementById('delete_btn')
+	delete_btn.onclick = function(e) {
+	console.log(e)
+	const venue_id = e.target.dataset['id'];
+	console.log(venue_id)
+
+	fetch('/venues/' + venue_id + '/delete', {
+		method: "DELETE",
+	})
+	.then(function(){
+		window.location.href = '/';
+	})
+	.catch(function(e) {
+		console.log('error',e)
+	})
+}
+
+</script>
 {% endblock %}
 
+<!-- 	document.getElementById('delete_btn').onclick = function(e) {
+	console.log(e)
+	const venue_id = e.target.dataset['id'];
+	fetch('/venues/' + venue_id + '/delete', {
+		method: 'DELETE',
+		headers: {
+          'Content-Type': 'application/json',
+          redirect: true
+        },
+        body: JSON.stringify({id: venue_id})
+
+	})
+	.then(res => {
+		console.log(res)
+	}).then(setTimeout(function(){
+		window.location.href = '/venues'
+	}, 1000))
+} -->
