@@ -22,15 +22,14 @@ class Venue(db.Model):
       return {"id": self.id, "name": self.name, "num_upcoming_shows": 0}
 
     def get_venue_history(self):
-      current_date = datetime.today().date()
-      past_shows_raw = Show.query.filter(Show.venue_id == self.id, Show.start_time < current_date).all()
-      upcoming_shows_raw = Show.query.filter(Show.venue_id == self.id, Show.start_time >= current_date).all()
       past_shows = []
       upcoming_shows = []
-      for show in past_shows_raw:
-        past_shows.append(show.get_show_per_venue())
-      for show in upcoming_shows_raw:
-        upcoming_shows.append(show.get_show_per_venue())
+
+      for show in self.shows:
+        if show.start_time < datetime.now():
+          past_shows.append(show.get_show_per_venue())
+        else:
+          upcoming_shows.append(show.get_show_per_venue())
 
       venue_show_history = {"id": self.id, 
         "name": self.name, 
@@ -70,15 +69,14 @@ class Artist(db.Model):
     shows = db.relationship('Show', backref='artist', lazy=True)
 
     def get_show_history(self):
-      current_date = datetime.today().date()
-      past_shows_raw = Show.query.filter(Show.artist_id == self.id, Show.start_time < current_date).all()
-      upcoming_shows_raw = Show.query.filter(Show.artist_id == self.id, Show.start_time >= current_date).all()
       past_shows = []
       upcoming_shows = []
-      for show in past_shows_raw:
-        past_shows.append(show.get_show_per_artist())
-      for show in upcoming_shows_raw:
-        upcoming_shows.append(show.get_show_per_artist())
+
+      for show in self.shows:
+        if show.start_time < datetime.now():
+          past_shows.append(show.get_show_per_artist())
+        else:
+          upcoming_shows.append(show.get_show_per_artist())
 
       artist_show_history = {"id": self.id, 
       "name": self.name, 
