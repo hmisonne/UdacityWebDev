@@ -15,7 +15,7 @@ class Venue(db.Model):
     seeking_talent = db.Column(db.Boolean)
     seeking_description = db.Column(db.String)
     website = db.Column(db.String(500))
-    shows = db.relationship('Show', backref='venue', lazy=True)
+    shows = db.relationship('Show', backref='venue', lazy=True, cascade="all, delete-orphan")
     genres = db.Column(db.String(120), nullable = False)
 
     def get_venue(self):
@@ -33,7 +33,7 @@ class Venue(db.Model):
 
       venue_show_history = {"id": self.id, 
         "name": self.name, 
-        "genres": self.genres,
+        "genres": self.genres.split(','),
         "address": self.address,
         "city": self.city,
         "state": self.state,
@@ -66,7 +66,7 @@ class Artist(db.Model):
     seeking_venue = db.Column(db.Boolean)
     seeking_description = db.Column(db.String)
     website = db.Column(db.String(500))
-    shows = db.relationship('Show', backref='artist', lazy=True)
+    shows = db.relationship('Show', backref='artist', lazy=True, cascade="all, delete-orphan")
 
     def get_show_history(self):
       past_shows = []
@@ -80,7 +80,7 @@ class Artist(db.Model):
 
       artist_show_history = {"id": self.id, 
       "name": self.name, 
-      "genres": self.genres,
+      "genres": self.genres.split(','),
       "city": self.city,
       "state": self.state,
       "phone": self.phone,

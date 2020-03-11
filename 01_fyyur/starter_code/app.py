@@ -5,7 +5,16 @@
 import json
 import dateutil.parser
 import babel
-from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify
+from flask import (
+  Flask, 
+  render_template,
+  request, 
+  Response, 
+  flash, 
+  redirect, 
+  url_for, 
+  jsonify
+  )
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -69,7 +78,7 @@ def venues():
 def search_venues():
   # implement search on artists with partial string search. 
   search_term = request.args.get('search_term')
-  venues = Venue.query.filter(func.lower(Venue.name).contains(search_term.lower())).all()
+  venues = Venue.query.filter(Venue.name.ilike(f'%{search_term}%')).all()
   data = []
   for venue in venues:
     new_data = {
@@ -85,6 +94,27 @@ def search_venues():
   }
 
   return render_template('pages/search_venues.html', results=response, search_term=request.args.get('search_term', ''))
+
+@app.route('/venues/search_bylocation', methods=['POST', 'GET'])
+def search_venues_bylocation():
+  location_search = request.args.get('search_term_location')
+  venues = Venue.query.filter(Venue.city.ilike(f'%{location_search}%')).all()
+  
+  data = []
+  for venue in venues:
+    new_data = {
+    "id": venue.id,
+    "name": venue.name,
+    "num_upcoming_shows": venue.get_venue_history()['upcoming_shows_count'],
+    }
+    data.append(new_data)
+
+  response = {
+  "count": len(data),
+  "data": data
+  }
+  return render_template('pages/search_venues.html', results=response, search_term=request.args.get('search_term_location', ''))
+
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
@@ -110,12 +140,14 @@ def create_venue_submission():
     flash('Venue ' + request.form['name'] + ' already exists, please choose a different name.')
   elif form.validate_on_submit(): 
     newVenue = Venue(name=form.name.data,
-      genres=form.genres.data,
+      genres=','.join(request.form.getlist('genres')),
       address =form.address.data,
       city = form.city.data,
       state = form.state.data,
       phone = form.phone.data,
       facebook_link = form.facebook_link.data,
+      seeking_talent = form.seeking_talent.data,
+      seeking_description = form.seeking_description.data
       )
     db.session.add(newVenue)
     db.session.commit()
@@ -159,7 +191,7 @@ def artists():
 def search_artists():
   # implement search on artists with partial string search. 
   name_search = request.args.get('search_term')
-  artists = Artist.query.filter(func.lower(Artist.name).contains(name_search.lower())).all()
+  artists = Artist.query.filter(Artist.name.ilike(f'%{name_search}%')).all()
   
   data = []
   for artist in artists:
@@ -219,7 +251,7 @@ def edit_artist_submission(artist_id):
   artist = Artist.query.get(artist_id)
   if form.validate_on_submit():
     artist.name = form.name.data.capitalize()
-    artist.genres = form.genres.data
+    artist.genres = ','.join(request.form.getlist('genres'))
     artist.city = form.city.data
     artist.state = form.state.data
     artist.phone = form.phone.data
@@ -249,7 +281,7 @@ def edit_venue_submission(venue_id):
   venue = Venue.query.get(venue_id)
   if form.validate_on_submit():
     venue.name = form.name.data.capitalize()
-    venue.genres = form.genres.data
+    venue.genres = ','.join(request.form.getlist('genres'))
     venue.city = form.city.data
     venue.state = form.state.data
     venue.phone = form.phone.data
@@ -282,12 +314,14 @@ def create_artist_submission():
     flash('Artist ' + request.form['name'] + ' already exists, please choose a different name.','warning')
   elif form.validate_on_submit():
     newArtist = Artist(name=form.name.data.capitalize(),
-      genres=form.genres.data,
+      genres = ','.join(request.form.getlist('genres')),
       city = form.city.data,
       state = form.state.data,
       phone = form.phone.data,
       image_link = form.image_link.data,
       facebook_link = form.facebook_link.data,
+      seeking_venue = form.seeking_venue.data,
+      seeking_description = form.seeking_description.data
       )
     db.session.add(newArtist)
     db.session.commit()

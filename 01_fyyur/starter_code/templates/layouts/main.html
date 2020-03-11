@@ -56,12 +56,16 @@
               {% if (request.endpoint == 'venues') or
                 (request.endpoint == 'search_venues') or
                 (request.endpoint == 'show_venue') %}
+
               <form class="search" method="get" action="/venues/search">
                 <input class="form-control"
                   type="search"
                   name="search_term"
-                  placeholder="Find a venue"
-                  aria-label="Search">
+                  placeholder="Find an venue by name"
+                  aria-label="Search"
+                  >
+                </form>
+              <form class="search" method="get" action="/venues/search_bylocation">
                  <input class="form-control"
                   type="search"
                   name="search_term_location"
@@ -73,14 +77,14 @@
               {% if (request.endpoint == 'artists') or
                 (request.endpoint == 'search_artists') or
                 (request.endpoint == 'show_artist') %}
+
               <form class="search" method="get" action="/artists/search">
                 <input class="form-control"
                   type="search"
                   name="search_term"
                   placeholder="Find an artist by name"
-                  aria-label="Search"
-                  id = "search-artist">
-                </form>
+                  aria-label="Search">
+              </form>
               <form class="search" method="get" action="/artists/search_bylocation">
                 <input class="form-control"
                   type="search"
@@ -89,6 +93,7 @@
                   aria-label="Search"
                   id = "search_location">
               </form>
+
               {% endif %}
             </li>
           </ul>
@@ -135,3 +140,5 @@
 
 </body>
 </html>
+
+
