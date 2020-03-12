@@ -2,12 +2,22 @@ import os
 from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from cerberus import Validator
+
 import random
 
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+v = Validator()
+
+v.schema = {
+'question': {'required': True,'type': 'string', 'minlength': 10},
+'answer': {'required': True},
+'category': {'required': True,'type': 'integer', 'min': 1, 'max': 6},
+'difficulty': {'required': True,'type': 'integer', 'min': 1, 'max': 5}
+}
 
 def paginate_questions(request, selection):
   page = request.args.get('page',1, type=int)
@@ -19,7 +29,6 @@ def paginate_questions(request, selection):
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
-  # app = Flask(__name__, root_path='frontend/')
   setup_db(app)
   
   '''
@@ -46,13 +55,12 @@ def create_app(test_config=None):
   @app.route('/categories', methods=['GET'])
   def get_all_categories():
     categories = Category.query.all()
-    # formated_categories = [cat.format() for cat in categories]
-
     formated_categories = {} 
     for cat in categories:
       formated_categories[cat.id] = cat.type
-    return jsonify({'categories': formated_categories})
-    # return render_template('pages/search_venues.html', results=response, search_term=request.args.get('search_term_location', ''))
+    return jsonify(
+      {'success': True,
+      'categories': formated_categories})
 
   '''
   @TODO: 
@@ -68,19 +76,24 @@ def create_app(test_config=None):
   Clicking on the page numbers should update the questions. 
   '''
   @app.route('/questions', methods=['GET'])
-  def get_all_questions():
+  def retrieve_questions():
     questions = Question.query.order_by(Question.id).all()
     current_questions = paginate_questions(request, questions)
+    
+    if len(current_questions) == 0:
+      abort(404)
+
     categories = Category.query.all()
     formated_categories = {} 
-
     for cat in categories:
       formated_categories[cat.id] = cat.type
     
-    return jsonify({'questions': current_questions,
-                    'total_questions':len(questions),
-                    'current_category':'',
-                    'categories':formated_categories})
+    return jsonify({
+      'success': True,
+      'questions': current_questions,
+      'total_questions':len(questions),
+      'current_category': None,
+      'categories': formated_categories})
 
   '''
   @TODO: 
@@ -121,6 +134,7 @@ def create_app(test_config=None):
   of the questions list in the "List" tab.  
   '''
   # curl -X POST -H "Content-Type: application/json" -d "{\"question\":\"What is the number of continents on Earth?\",\"answer\":\"5\",\"difficulty\":1,\"category\":3}"  http://127.0.0.1:5000/questions
+  
   @app.route('/questions', methods=['POST'])
   def create_questions():
     body = request.get_json()
@@ -128,15 +142,35 @@ def create_app(test_config=None):
     new_answer  = body.get('answer',None)
     new_category = body.get('category',None)
     new_difficulty  = body.get('difficulty',None)
+    search_term = body.get('searchTerm',None)
 
     try:
+      if search_term:
+        selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).order_by(Question.id).all()
+        current_questions = [question.format() for question in selection]
+        current_category = [question.category for question in selection]
+        return jsonify({
+          'success': True,
+          'questions': current_questions,
+          'total_questions':len(selection),
+          'current_category': current_category
+          })  
+      
+      question_check = Question.query.filter(Question.question.ilike(f'%{new_question}%')).one_or_none()
+      
+      # Abort if invalid fields in the question or duplicate
+      if v.validate(body) == False or question_check != None:
+        # abort(400) # This specific number will still will return a 422 error code
+        abort(422)
+
+
       question = Question(question=new_question,
                           answer=new_answer,
                           category=new_category,
                           difficulty=new_difficulty)
 
       question.insert()
-      # print(question)
+
       selection = Question.query.order_by(Question.id).all()
       current_questions = paginate_questions(request, selection)
 
@@ -161,22 +195,6 @@ def create_app(test_config=None):
   '''
 
   # curl -X POST -H "Content-Type: application/json" -d "{\"search_term\":\"title\"}"  http://127.0.0.1:5000/questions_search
-  @app.route('/questions_search', methods=['POST'])
-  def search_question():
-    body = request.get_json()
-    search_term = body['searchTerm']
-    try:
-      selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).order_by(Question.id).all()
-      current_questions = [question.format() for question in selection]
-      current_category = [question.category for question in selection]
-      return jsonify({
-        'success': True,
-        'questions': current_questions,
-        'total_questions':len(selection),
-        'current_category': current_category
-        })  
-    except:
-      abort(422)
 
 
   '''
@@ -203,7 +221,7 @@ def create_app(test_config=None):
         })    
 
     except:
-      abort(422)
+      abort(404)
 
 
   '''
@@ -252,7 +270,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": False,
       "error": 404,
-      "message": "Not found"
+      "message": "Resource not found"
       }), 404
 
   @app.errorhandler(422)
@@ -262,6 +280,23 @@ def create_app(test_config=None):
       "error": 422,
       "message": "Request unprocessable"
       }), 422
+
+  @app.errorhandler(400)
+  def bad_request(error):
+    return jsonify({
+      "success": False,
+      "error": 400,
+      "message": "Missing or incorrect information provided"
+      }), 400
+
+  @app.errorhandler(500)
+  def internal_server_error(error):
+    return jsonify({
+      "success": False,
+      "error": 500,
+      "message": "Internal Server Error"
+      }), 500
+
   return app
 
     
