@@ -142,7 +142,22 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
-  
+  @app.route('/questions_search', methods=['POST'])
+  def search_question():
+    body = request.get_json()
+    search_term = body['search_term']
+    try:
+      selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).order_by(Question.id).all()
+      current_questions = paginate_questions(request, questions)
+      return jsonify({
+        'success': True,
+        'created': question.id,
+        'questions': current_questions,
+        'total_num_questions':len(selection)
+        })    
+    except:
+      abort(422)
+
 
   '''
   @TODO: 
@@ -152,6 +167,19 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+  @app.route('/questions/<category>', methods=['GET'])
+  def search_questions_by_category(category):
+    try:
+      selection = Question.query.filter(Question.category == category).order_by(Question.id).all()
+      current_questions = paginate_questions(request, questions)
+      return jsonify({
+        'success': True,
+        'created': question.id,
+        'questions': current_questions,
+        'total_num_questions':len(selection)
+        })    
+    except:
+      abort(422)
 
 
   '''
@@ -165,13 +193,55 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  @app.route('/quizz', methods=['POST'])
+  def get_quizz_questions():
+    body = request.get_json()
+    category = body.get('category',None)
+    previous_question = body.get('previous_question',[])
+    try:
+      if category == None:
+        selection = Question.query.filter(Question.category == category).all()
+      else:
+        selection = Question.query.filter(Question.category == category).all()
+      
+      random_selection = random.shuffle(selection)
+      for question in random_selection:
+        if question not in previous_question:
+          current_question = question
+      if current_question == None:
+        return jsonify({
+          'end_of_test': True
+          })
+          
+      return jsonify({
+        'success': True,
+        'question': question.question
+        'answer': question.answer
+        'previous_question': previous_question.append(current_question)
+        })
+    except:
+      abort(422)
 
   '''
   @TODO: 
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
-  
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      "success": False,
+      "error": 404,
+      "message": "Not found"
+      }), 404
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return jsonify({
+      "success": False,
+      "error": 422,
+      "message": "Request unprocessable"
+      }), 422
   return app
 
     
