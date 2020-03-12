@@ -164,7 +164,7 @@ def create_app(test_config=None):
   @app.route('/questions_search', methods=['POST'])
   def search_question():
     body = request.get_json()
-    search_term = body['search_term']
+    search_term = body['searchTerm']
     try:
       selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).order_by(Question.id).all()
       current_questions = [question.format() for question in selection]
@@ -187,7 +187,7 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-
+# curl -X GET http://127.0.0.1:5000/categories/1/questions
   @app.route('/categories/<category_id>/questions', methods=['GET'])
   def search_questions_by_category(category_id):
     try:
@@ -217,31 +217,27 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
-  @app.route('/quizz', methods=['POST'])
+  # curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}}"  http://127.0.0.1:5000/quizzes
+  @app.route('/quizzes', methods=['POST'])
   def get_quizz_questions():
     body = request.get_json()
-    category = body.get('category',None)
-    previous_question = body.get('previous_question',[])
+    previous_questions = body.get('previous_questions',[])
+    quiz_category = body.get('quiz_category',None)
+
     try:
-      if category == None:
-        selection = Question.query.filter(Question.category == category).all()
+      if quiz_category['id'] == 0:
+        selection = Question.query.all()
       else:
-        selection = Question.query.filter(Question.category == category).all()
-      
-      random_selection = random.shuffle(selection)
+        selection = Question.query.filter(Question.category == quiz_category['id']).all()
+
+      random_selection = random.sample(selection, len(selection))
       for question in random_selection:
-        if question not in previous_question:
-          current_question = question
-      if current_question == None:
-        return jsonify({
-          'end_of_test': True
-          })
-          
+        if question.format()['id'] not in previous_questions:
+          current_question = question.format()
+          break
       return jsonify({
         'success': True,
-        'question': question.question,
-        'answer': question.answer,
-        'previous_question': previous_question.append(current_question)
+        'question': current_question
         })
     except:
       abort(422)
