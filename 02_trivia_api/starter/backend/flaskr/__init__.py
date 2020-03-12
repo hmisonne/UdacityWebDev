@@ -42,10 +42,15 @@ def create_app(test_config=None):
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
+
   @app.route('/categories', methods=['GET'])
   def get_all_categories():
     categories = Category.query.all()
-    formated_categories = [cat.format() for cat in categories]
+    # formated_categories = [cat.format() for cat in categories]
+
+    formated_categories = {} 
+    for cat in categories:
+      formated_categories[cat.id] = cat.type
     return jsonify({'categories': formated_categories})
     # return render_template('pages/search_venues.html', results=response, search_term=request.args.get('search_term_location', ''))
 
@@ -66,10 +71,17 @@ def create_app(test_config=None):
   def get_all_questions():
     questions = Question.query.order_by(Question.id).all()
     current_questions = paginate_questions(request, questions)
+    categories = Category.query.all()
+    formated_categories = {} 
+
+    for cat in categories:
+      formated_categories[cat.id] = cat.type
+    
     return jsonify({'questions': current_questions,
-                    'total_num_questions':len(questions),
+                    'total_questions':len(questions),
                     'current_category':'',
-                    'categories':''})
+                    'categories':formated_categories})
+
   '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
@@ -77,21 +89,22 @@ def create_app(test_config=None):
   TEST: When you click the trash icon next to a question, the question will be removed.
   This removal will persist in the database and when you refresh the page. 
   '''
+  # curl -X DELETE http://127.0.0.1:5000/questions/30
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def remove_question(question_id):
     try:
       question = Question.query.filter(Question.id == question_id).one_or_none()
+
       if question is None:
         abort(404)
 
       question.delete()
-      selection = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
+      # selection = Question.query.order_by(Question.id).all()
+      # current_questions = paginate_questions(request, questions)
       return jsonify({
-        'questions': current_questions,
-        'total_num_questions':len(selection),
-        'current_category':'',
-        'categories':''})
+        'success': True,
+        'question_id_deleted': question_id
+      })
     except:
       abort(422)
 
@@ -107,6 +120,7 @@ def create_app(test_config=None):
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
   '''
+  # curl -X POST -H "Content-Type: application/json" -d "{\"question\":\"What is the number of continents on Earth?\",\"answer\":\"5\",\"difficulty\":1,\"category\":3}"  http://127.0.0.1:5000/questions
   @app.route('/questions', methods=['POST'])
   def create_questions():
     body = request.get_json()
@@ -120,14 +134,17 @@ def create_app(test_config=None):
                           answer=new_answer,
                           category=new_category,
                           difficulty=new_difficulty)
+
       question.insert()
+      # print(question)
       selection = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
+      current_questions = paginate_questions(request, selection)
+
       return jsonify({
         'success': True,
         'created': question.id,
         'questions': current_questions,
-        'total_num_questions':len(selection)
+        'total_questions':len(selection)
         })
 
     except:
@@ -142,19 +159,22 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+
+  # curl -X POST -H "Content-Type: application/json" -d "{\"search_term\":\"title\"}"  http://127.0.0.1:5000/questions_search
   @app.route('/questions_search', methods=['POST'])
   def search_question():
     body = request.get_json()
     search_term = body['search_term']
     try:
       selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
+      current_questions = [question.format() for question in selection]
+      current_category = [question.category for question in selection]
       return jsonify({
         'success': True,
-        'created': question.id,
         'questions': current_questions,
-        'total_num_questions':len(selection)
-        })    
+        'total_questions':len(selection),
+        'current_category': current_category
+        })  
     except:
       abort(422)
 
@@ -167,17 +187,21 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-  @app.route('/questions/<category>', methods=['GET'])
-  def search_questions_by_category(category):
+
+  @app.route('/categories/<category_id>/questions', methods=['GET'])
+  def search_questions_by_category(category_id):
     try:
-      selection = Question.query.filter(Question.category == category).order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
+      selection = Question.query.filter(Question.category == category_id).order_by(Question.id).all()
+      current_questions = paginate_questions(request, selection)
+      current_category = Category.query.get(category_id).type
+
       return jsonify({
         'success': True,
-        'created': question.id,
         'questions': current_questions,
-        'total_num_questions':len(selection)
+        'current_category':current_category,
+        'total_questions':len(selection)
         })    
+
     except:
       abort(422)
 
@@ -215,8 +239,8 @@ def create_app(test_config=None):
           
       return jsonify({
         'success': True,
-        'question': question.question
-        'answer': question.answer
+        'question': question.question,
+        'answer': question.answer,
         'previous_question': previous_question.append(current_question)
         })
     except:
