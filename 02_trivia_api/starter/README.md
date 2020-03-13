@@ -17,11 +17,9 @@ This project is part of the Udacity Full Stack Developer Nano Degree. The goal o
 ### Pre-requisites and Local Development 
 Developers using this project should already have Python3, pip and node installed on their local machines.
 
-[Fork](https://help.github.com/en/articles/fork-a-repo) the [project repository]()
+Starter code available on this [project repository](https://help.github.com/en/articles/fork-a-repo)
 
 ## About the Stack
-
-We started the full stack application for you. It is desiged with some key functional areas:
 
 ### Backend
 
@@ -111,9 +109,9 @@ The API will return three error types when requests fail:
 #### GET /questions
 - General:
 	- Fetches a dictionary of questions in which the keys are the id, question, answer, category, difficulty.
-	- Request Arguments: page number
-    - Returns a list of question objects, categories object, current_category, success value, and total number of questions
-    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
+	- Request Arguments: page number (optional)
+	- Returns a list of question objects, categories object, current_category, success value, and total number of questions
+	- Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
 
 - Sample: `curl http://127.0.0.1:5000/questions` or `curl http://127.0.0.1:5000/questions?page=1`
 
@@ -156,7 +154,7 @@ The API will return three error types when requests fail:
     - Creates a new question. Returns the id of the created question, success value.
     	- Request Arguments: question, answer, category and difficulty
 
--`curl -X POST -H "Content-Type: application/json" -d "{\"question\":\"What is the number of continents on Earth?\",\"answer\":\"5\",\"difficulty\":1,\"category\":3}"  http://127.0.0.1:5000/questions`
+- Sample:`curl -X POST -H "Content-Type: application/json" -d "{\"question\":\"What is the number of continents on Earth?\",\"answer\":\"5\",\"difficulty\":1,\"category\":3}"  http://127.0.0.1:5000/questions`
 
 ```
 {
@@ -165,7 +163,7 @@ The API will return three error types when requests fail:
 }
 ```
 
-- `curl -X POST -H "Content-Type: application/json" -d "{\"searchTerm\":\"title\"}"  http://127.0.0.1:5000/questions`
+- Sample: `curl -X POST -H "Content-Type: application/json" -d "{\"searchTerm\":\"title\"}"  http://127.0.0.1:5000/questions`
 
 ```
 {
@@ -195,7 +193,7 @@ The API will return three error types when requests fail:
     - Returns a list of question objects, success value, current category, and number of questions in this specific category.
 
 
--`curl -X GET http://127.0.0.1:5000/categories/1/questions`
+- Sample:`curl -X GET http://127.0.0.1:5000/categories/1/questions`
 
 ```
 {
@@ -230,11 +228,11 @@ The API will return three error types when requests fail:
 
 #### GET /questions per category
 - General:
-    - Generates randomly questions that belongs to a specific category. 
+    - Generates randomly a question that belongs to a specific category. 
     - Returns a question and a success value.
 
 
--`curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}}"  http://127.0.0.1:5000/quizzes`
+- Sample:`curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}}"  http://127.0.0.1:5000/quizzes`
 
 ```
 {
@@ -252,7 +250,7 @@ The API will return three error types when requests fail:
 #### DELETE /questions/{question_id}
 - General:
     - Deletes the question of the given ID if it exists. Returns the id of the deleted question, success value
-- `curl -X DELETE http://127.0.0.1:5000/questions/2`
+- Sample: `curl -X DELETE http://127.0.0.1:5000/questions/2`
 
 ```
 {
