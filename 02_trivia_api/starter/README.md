@@ -230,11 +230,11 @@ The API will return three error types when requests fail:
 #### POST /quizzes per category
 - General:
     - Generates randomly a question that belongs to a specific category.
-    - Request Arguments: previous_questions and quiz_category (both are optionals)
+    - Request Arguments: list of previous questions and question category (both are optionals)
     - Returns a question and a success value.
 
 
-- Sample:`curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}}"  http://127.0.0.1:5000/quizzes`
+- Sample:`curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}, \"previous_questions\": [1,2]}"  http://127.0.0.1:5000/quizzes`
 
 ```
 {
