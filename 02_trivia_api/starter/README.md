@@ -88,23 +88,6 @@ The API will return three error types when requests fail:
 - 500: Internal Server Error
 
 ### Endpoints 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
 
 #### GET /categories
 - General:
@@ -132,7 +115,7 @@ GET '/categories'
     - Returns a list of question objects, categories object, current_category, success value, and total number of questions
     - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
 
-- Sample: `curl http://127.0.0.1:5000/books` or `curl http://127.0.0.1:5000/books?page=1`
+- Sample: `curl http://127.0.0.1:5000/questions` or `curl http://127.0.0.1:5000/questions?page=1`
 
 ``` {
   "categories": {
@@ -169,7 +152,7 @@ GET '/categories'
 #### POST /questions
 - General:
     - Searches questions that contains a specific term if a search term is provided. Returns the list of questions, success value.
-    	- Request Arguments: search_term
+    	- Request Arguments: search term
     - Creates a new question. Returns the id of the created question, success value.
     	- Request Arguments: question, answer, category and difficulty
 
@@ -182,10 +165,88 @@ GET '/categories'
 }
 ```
 
-- `curl -X POST -H "Content-Type: application/json" -d "{\"search_term\":\"title\"}"  http://127.0.0.1:5000/questions`
+- `curl -X POST -H "Content-Type: application/json" -d "{\"searchTerm\":\"title\"}"  http://127.0.0.1:5000/questions`
 
 ```
+{
+  "questions": [
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }
+  ],
+  "success": true
+}
+```
 
+#### GET /questions per category
+- General:
+    - Searches questions that belongs to a specific category. 
+    - Returns a list of question objects, success value, current category, and number of questions in this specific category.
+
+
+-`curl -X GET http://127.0.0.1:5000/categories/1/questions`
+
+```
+{
+  "current_category": "Science",
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Blood",
+      "category": 1,
+      "difficulty": 4,
+      "id": 22,
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+```
+
+#### GET /questions per category
+- General:
+    - Generates randomly questions that belongs to a specific category. 
+    - Returns a question and a success value.
+
+
+-`curl -X POST -H "Content-Type: application/json" -d "{\"quiz_category\":{\"id\":1}}"  http://127.0.0.1:5000/quizzes`
+
+```
+{
+  "question": {
+    "answer": "Alexander Fleming",
+    "category": 1,
+    "difficulty": 3,
+    "id": 21,
+    "question": "Who discovered penicillin?"
+  },
+  "success": true
+}
 ```
 
 #### DELETE /questions/{question_id}
@@ -194,7 +255,10 @@ GET '/categories'
 - `curl -X DELETE http://127.0.0.1:5000/questions/2`
 
 ```
-
+{
+  "question_id_deleted": 2,
+  "success": true
+}
 ```
 
 
