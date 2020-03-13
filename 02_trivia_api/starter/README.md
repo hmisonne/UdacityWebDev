@@ -187,9 +187,10 @@ The API will return three error types when requests fail:
 }
 ```
 
-#### GET /questions per category
+#### GET /categories/{category_id}/questions per category
 - General:
     - Searches questions that belongs to a specific category. 
+    - Request Arguments: Category ID
     - Returns a list of question objects, success value, current category, and number of questions in this specific category.
 
 
@@ -226,9 +227,10 @@ The API will return three error types when requests fail:
 }
 ```
 
-#### GET /questions per category
+#### POST /quizzes per category
 - General:
-    - Generates randomly a question that belongs to a specific category. 
+    - Generates randomly a question that belongs to a specific category.
+    - Request Arguments: previous_questions and quiz_category (both are optionals)
     - Returns a question and a success value.
 
 
@@ -266,4 +268,4 @@ The API will return three error types when requests fail:
 Helene Misonne
 
 ## Acknowledgements 
-Thank you Udacity for providing the framework and guidelines for this great project.
+I want to thank Udacity for providing the framework and guidelines for this great project.
