@@ -10,9 +10,20 @@ Follow instructions to install the latest version of python for your platform in
 
 #### Virtual Enviornment
 
-conda activate py37 
-
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+
+Python version 3.8 does not currently work with this project, I downgraded to Python 3.7
+
+- To create the new environment for Python 3.6, in your terminal window run:
+```
+conda create -n py37 python=3.7 anaconda
+```
+- To activate this virtual environment, run:
+```
+conda activate py37 
+```
+
+https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-python.html
 
 #### PIP Dependencies
 
@@ -67,36 +78,3 @@ One note before you delve into your tasks: for each endpoint you are expected to
 7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
-
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
-
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
-```
-
-
-## Testing
-To run the tests, run
-```
-dropdb -U postgres trivia_test
-createdb -U postgres trivia_test
-psql -U postgres trivia_test < trivia.psql
-python test_flaskr.py
-```
