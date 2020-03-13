@@ -2,7 +2,7 @@
 
 ## Full Stack Trivia
 
-This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is structure plan, implement, and test an API of a Trivia app.
+This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is to plan, implement, and test an API of a Trivia app.
 
 ## App functionalities
 
