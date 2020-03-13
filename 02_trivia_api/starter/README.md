@@ -2,9 +2,9 @@
 
 ## Full Stack Trivia
 
-Udacity is invested in creating bonding experiences for its employees and students. A bunch of team members got the idea to hold trivia on a regular basis and created a  webpage to manage the trivia app and play the game, but their API experience is limited and still needs to be built out. 
+This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is structure plan, implement, and test an API of a Trivia app.
 
-That's where you come in! Help them finish the trivia app so they can start holding trivia and seeing who's the most knowledgeable of the bunch. The application must:
+## App functionalities
 
 1) Display questions - both all questions and by category. Questions should show the question, category and difficulty rating by default and can show/hide the answer. 
 2) Delete questions.
@@ -12,20 +12,12 @@ That's where you come in! Help them finish the trivia app so they can start hold
 4) Search for questions based on a text query string.
 5) Play the quiz game, randomizing either all questions or within a specific category. 
 
-Completing this trivia app will give you the ability to structure plan, implement, and test an API - skills essential for enabling your future applications to communicate with others. 
+## Getting started
 
-## Tasks
+### Pre-requisites and Local Development 
+Developers using this project should already have Python3, pip and node installed on their local machines.
 
-There are `TODO` comments throughout project. Start by reading the READMEs in:
-
-1. [`./frontend/`](./frontend/README.md)
-2. [`./backend/`](./backend/README.md)
-
-We recommend following the instructions in those files in order. This order will look familiar from our prior work in the course.
-
-## Starting and Submitting the Project
-
-[Fork](https://help.github.com/en/articles/fork-a-repo) the [project repository]() and [Clone](https://help.github.com/en/articles/cloning-a-repository) your forked repository to your machine. Work on the project locally and make sure to push all your changes to the remote repository before submitting the link to your repository in the Classroom. 
+[Fork](https://help.github.com/en/articles/fork-a-repo) the [project repository]()
 
 ## About the Stack
 
@@ -33,12 +25,183 @@ We started the full stack application for you. It is desiged with some key funct
 
 ### Backend
 
-The `./backend` directory contains a partially completed Flask and SQLAlchemy server. You will work primarily in app.py to define your endpoints and can reference models.py for DB and SQLAlchemy setup. 
+From the backend folder run `pip install requirements.txt`. All required packages are included in the requirements file. 
+
+To run the application run the following commands: 
+```
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+flask run
+```
+These commands put the application in development and directs our application to use the `__init__.py` file in our flaskr folder. If running locally on Windows, look for the commands in the [Flask documentation](http://flask.pocoo.org/docs/1.0/tutorial/factory/).
+
+The application is run on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration. 
+
+[View the README.md within ./backend for more details.](./backend/README.md)
 
 ### Frontend
 
-The `./frontend` directory contains a complete React frontend to consume the data from the Flask server. You will need to update the endpoints after you define them in the backend. Those areas are marked with TODO and can be searched for expediency. 
 
-Pay special attention to what data the frontend is expecting from each API response to help guide how you format your API. 
+From the frontend folder, run the following commands to start the client: 
+```
+npm install // only once to install dependencies
+npm start 
+```
+
+By default, the frontend will run on localhost:3000. 
 
 [View the README.md within ./frontend for more details.](./frontend/README.md)
+
+### Tests
+In order to run tests navigate to the backend folder and run the following commands: 
+
+```
+dropdb trivia_test
+createdb trivia_test
+psql trivia_test < trivia.psql
+python test_flaskr.py
+```
+
+The first time you run the tests, omit the dropdb command. 
+
+All tests are kept in that file and should be maintained as updates are made to app functionality. 
+
+## API Reference
+
+### Getting Started
+- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
+- Authentication: This version of the application does not require authentication or API keys. 
+
+### Error Handling
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False, 
+    "error": 400,
+    "message": "Bad Request"
+}
+```
+The API will return three error types when requests fail:
+- 400: Bad request
+- 404: Resource not found
+- 422: Request unprocessable
+- 500: Internal Server Error
+
+### Endpoints 
+Endpoints
+GET '/categories'
+GET ...
+POST ...
+DELETE ...
+
+GET '/categories'
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+{'1' : "Science",
+'2' : "Art",
+'3' : "Geography",
+'4' : "History",
+'5' : "Entertainment",
+'6' : "Sports"}
+
+
+#### GET /categories
+- General:
+	- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+	- Request Arguments: None
+	- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs and a success value.
+- Sample: `curl http://127.0.0.1:5000/categories`
+```{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true
+}
+```
+
+#### GET /questions
+- General:
+	- Fetches a dictionary of questions in which the keys are the id, question, answer, category, difficulty.
+	- Request Arguments: page number
+    - Returns a list of question objects, categories object, current_category, success value, and total number of questions
+    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
+
+- Sample: `curl http://127.0.0.1:5000/books` or `curl http://127.0.0.1:5000/books?page=1`
+
+``` {
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    },
+    ...
+  ],
+  "success": true,
+  "total_questions": 29
+}
+```
+
+#### POST /questions
+- General:
+    - Searches questions that contains a specific term if a search term is provided. Returns the list of questions, success value.
+    	- Request Arguments: search_term
+    - Creates a new question. Returns the id of the created question, success value.
+    	- Request Arguments: question, answer, category and difficulty
+
+-`curl -X POST -H "Content-Type: application/json" -d "{\"question\":\"What is the number of continents on Earth?\",\"answer\":\"5\",\"difficulty\":1,\"category\":3}"  http://127.0.0.1:5000/questions`
+
+```
+{
+  "created": 43,
+  "success": true
+}
+```
+
+- `curl -X POST -H "Content-Type: application/json" -d "{\"search_term\":\"title\"}"  http://127.0.0.1:5000/questions`
+
+```
+
+```
+
+#### DELETE /questions/{question_id}
+- General:
+    - Deletes the question of the given ID if it exists. Returns the id of the deleted question, success value
+- `curl -X DELETE http://127.0.0.1:5000/questions/2`
+
+```
+
+```
+
+
+## Deployment N/A
+
+## Authors
+Helene Misonne
+
+## Acknowledgements 
+Thank you Udacity for providing the framework and guidelines for this great project.

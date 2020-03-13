@@ -152,8 +152,6 @@ def create_app(test_config=None):
         return jsonify({
           'success': True,
           'questions': current_questions,
-          'total_questions':len(selection),
-          'current_category': current_category
           })  
       
       question_check = Question.query.filter(Question.question.ilike(f'%{new_question}%')).one_or_none()
@@ -171,14 +169,10 @@ def create_app(test_config=None):
 
       question.insert()
 
-      selection = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, selection)
 
       return jsonify({
         'success': True,
         'created': question.id,
-        'questions': current_questions,
-        'total_questions':len(selection)
         })
 
     except:
@@ -286,7 +280,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": False,
       "error": 400,
-      "message": "Missing or incorrect information provided"
+      "message": "Bad request"
       }), 400
 
   @app.errorhandler(500)
