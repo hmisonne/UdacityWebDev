@@ -25,12 +25,11 @@ Starter code available on this [project repository](https://help.github.com/en/a
 
 From the backend folder run `pip install requirements.txt`. All required packages are included in the requirements file. 
 
-The username and passwords of the Postgres database for this project are set up in my environment variables. To use your own credentials replace "os.environ.get('DB_USER')" and 
-"os.environ.get('DB_PASS')" on the models.py file
+The username and passwords of the Postgres database for this project are set up in my environment variables. To use your own credentials replace the following fields on the models.py file
 
 ```
-db_user = os.environ.get('DB_USER')
-db_password = os.environ.get('DB_PASS')
+db_user = <your_username>
+db_password = <your_password>
 ```
 
 To run the application run the following commands: 
