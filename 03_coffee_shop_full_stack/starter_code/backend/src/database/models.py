@@ -23,7 +23,7 @@ def setup_db(app):
 db_drop_and_create_all()
     drops the database tables and starts fresh
     can be used to initialize a clean database
-    !!NOTE you can change the database_filename variable to have multiple verisons of a database
+    !!NOTE you can change the database_filename variable to have multiple versions of a database
 '''
 def db_drop_and_create_all():
     db.drop_all()
@@ -33,6 +33,7 @@ def db_drop_and_create_all():
 Drink
 a persistent drink entity, extends the base SQLAlchemy Model
 '''
+
 class Drink(db.Model):
     # Autoincrementing, unique primary key
     id = Column(Integer().with_variant(Integer, "sqlite"), primary_key=True)
@@ -47,6 +48,7 @@ class Drink(db.Model):
         short form representation of the Drink model
     '''
     def short(self):
+        print('json')
         print(json.loads(self.recipe))
         short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
         return {

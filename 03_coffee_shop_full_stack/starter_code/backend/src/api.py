@@ -13,14 +13,13 @@ CORS(app)
 
 # https://fsnd-hm.auth0.com/authorize?audience=drink&response_type=token&client_id=d59ElIPjGrbgKfQzkJpasYUEkpXOFvzJ&redirect_uri=https://127.0.0.1:5000/login-results
 
-# access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UTTJRVGsxT1VJME5rUTRRekZDUXpnM1FUUXlRMFEwUXpneE5UZERNVEl5TVVGRU1qVTFSZyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtaG0uYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlNmQwYzc0MDg0NTcxMGM5MjIxMWQzMCIsImF1ZCI6ImRyaW5rIiwiaWF0IjoxNTg0NDUzOTg1LCJleHAiOjE1ODQ0NjExODUsImF6cCI6ImQ1OUVsSVBqR3JiZ0tmUXprSnBhc1lVRWtwWE9GdnpKIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyJdfQ.H_XaGQaj8FRaBfvOvyHQFIwg2mwKQFgOmgujlcn4vxQ-WNz4OsXubhCmoakAvj7v6Ymc8SsYMGdVmvp5vGEF5GFp1O341QhVRQORPnVMMu0M4Zfb553CsRpBcPZV7NpRFabG0ZyO9HEAgpw0dAM2eVc3wlp_cC-QU0Ysg6c6lEkxA5E2xQEetUnq_cUuyiyQSVAZ248AA2Rx_B-XZmg5CjFuCTsbid0LkGI1xIvHzs2qWsrhXCExj8SpHyaPyp4UQZ1mgS-QEhACngAOwh_u4TAE0Rl5EFQDKToRYgupL8RKTdppwEVtIOJ03B89_2FiDrRp7JN_8n8yHr4LpikPJA
-
+# access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UTTJRVGsxT1VJME5rUTRRekZDUXpnM1FUUXlRMFEwUXpneE5UZERNVEl5TVVGRU1qVTFSZyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtaG0uYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlNmQwYzc0MDg0NTcxMGM5MjIxMWQzMCIsImF1ZCI6ImRyaW5rIiwiaWF0IjoxNTg0NDY3NjY2LCJleHAiOjE1ODQ0NzQ4NjYsImF6cCI6ImQ1OUVsSVBqR3JiZ0tmUXprSnBhc1lVRWtwWE9GdnpKIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyJdfQ.U0SpuA7AEpF2DvjNHR1mJ21Dif-HzLUhahW_l9mHMNqtDxZtBkQa5k338yRrftj4_pFPCWcU7ww0cM_wDvOfORh2piORWyoLpWwdhLmM96C7bMaZ3cL-XeZ8OEwv_iX0ShTQdW2A6fBbvd-8dwsbSMO4E6yyr9AMID2fSiiBp1W7fsCrlirROFNMec4bdCJAOL5iwmoFdyP21jF3XGDQXXyUt2FtEIBojWsqXLcCkLBFBUltN6gla90AZ9p9V40u8rxO9iJUfMWBTl1HWA9pByUZPMYyXab0MxFFeXszBmFHL17_qqYBi0wX-423l1n9m9crD_HwkT456RK_oxgoTQ
 '''
 @TODO uncomment the following line to initialize the datbase
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-db_drop_and_create_all()
+# db_drop_and_create_all()
 
 ## ROUTES
 '''
@@ -31,18 +30,34 @@ db_drop_and_create_all()
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+drink1 = {
+    "title": "Water3",
+    "recipe": [{
+        "name": "Water",
+        "color": "blue",
+        "parts": 1
+    }]
+}
+
 @app.route('/drinks', methods=['GET'])
 def get_all_drinks():
     all_drink = Drink.query.all()
-    drinks = []
-    for drink in all_drink:
-        drinks.append(drink.short())
+
+    drinks =[drink.long() for drink in all_drink]
+    print(drinks)
     return jsonify({
         "success": True, 
         "drinks": drinks})
 
 @app.route('/')
 def index():
+
+    # try:
+    # drink = Drink(title=drink1['title'],recipe=json.dumps(drink1['recipe']))
+    # drink.insert()
+    # print(drink)
+    # except:
+    #     print('abort')
     return 'Hello'
 
 '''
@@ -56,11 +71,8 @@ def index():
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_details(payload):
-    print(payload)
     all_drink = Drink.query.all()
-    drinks = []
-    for drink in all_drink:
-        drinks.append(drink.long())
+    drinks =[drink.long() for drink in all_drink]
     return jsonify({
         "success": True, 
         "drinks": drinks})
@@ -76,18 +88,19 @@ def get_drinks_details(payload):
 '''
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
-def add_drink():
+def add_drink(payload):
     body = request.get_json()
+    print('body', body)
     new_title = body.get('title', None)
     new_recipe = body.get('recipe', None)
-    try:
-        drink = Drink(title=new_title,recipe=new_recipe)
-        drink.insert()
-        return jsonify({
-            "success": True, 
-            "drinks": drink})
-    except:
-        abort(422)
+    # try:
+    new_drink = Drink(title=new_title,recipe=json.dumps(new_recipe))
+    new_drink.insert()
+    return jsonify({
+        "success": True, 
+        "drinks": [new_drink.long()]})
+    # except:
+    #     abort(422)
 
 '''
 @TODO implement endpoint
@@ -100,10 +113,10 @@ def add_drink():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
-@app.route('/drinks/<id>', methods=['PATCH'])
+@app.route('/drinks/<drink_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
-def upate_drinks(id):
-    selected_drink = Drink.query.filter(Drink.id == id).one_or_none()
+def upate_drinks(token, drink_id):
+    selected_drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
 
     if selected_drink == None:
         abort(404)
@@ -112,8 +125,10 @@ def upate_drinks(id):
     new_title = body.get('title', None)
     new_recipe = body.get('recipe', None)
 
-    selected_drink.title = new_title
-    selected_drink.recipe = new_recipe
+    if new_title != None:
+        selected_drink.title = new_title
+    if new_recipe != None:
+        selected_drink.recipe = json.dumps(new_recipe)
     
     selected_drink.update()
     drink = selected_drink.long()
@@ -132,17 +147,17 @@ def upate_drinks(id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
-@app.route('/drinks/<id>', methods=['DELETE'])
+@app.route('/drinks/<drink_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
-def delete_drinks(id):
-    selected_drink = Drink.query.filter(Drink.id == id).one_or_none()
+def delete_drinks(token, drink_id):
+    selected_drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
 
     if selected_drink == None:
         abort(404)
     selected_drink.delete()
     return jsonify({
     "success": True, 
-    "delete": id
+    "delete": drink_id
     })
 ## Error Handling
 '''
