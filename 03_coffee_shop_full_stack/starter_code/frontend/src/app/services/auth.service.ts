@@ -27,9 +27,10 @@ export class AuthService {
     link += 'audience=' + this.audience + '&';
     link += 'response_type=token&';
     link += 'client_id=' + this.clientId + '&';
-    link += 'redirect_uri=' + this.callbackURL + callbackPath;
+    link += 'redirect_uri=' + this.callbackURL;
     return link;
   }
+  //    link += 'redirect_uri=' + this.callbackURL + callbackPath;
 
   // invoked in app.component on load
   check_token_fragment() {
