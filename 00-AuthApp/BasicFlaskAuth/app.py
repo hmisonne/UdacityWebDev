@@ -155,7 +155,7 @@ def requires_auth(permission=''):
 #     return 'Access Granted'
 
 @app.route('/image')
-# @requires_auth('get:images')
+@requires_auth('get:images')
 def images():
     print(jwt)
     return 'not implemented'
