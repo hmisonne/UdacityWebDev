@@ -91,35 +91,38 @@ Navigate to the authorization tab, and update the type to Bearer Token and paste
 - General:
 	- Fetches a dictionary of questions in which the keys are the id and recipe.
 	- Request Arguments: None
-	- Returns: A list of drinks
+	- Returns: A list of drinks with short description of th recipe
 
 ```
 {
   "drinks": [
     {
-      "id": 2,
-      "recipe": {
-        "color": "pink",
-        "name": "Water",
-        "parts": 1
-      },
-      "title": "Water"
-    },
-    {
       "id": 3,
       "recipe": [
         {
           "color": "Black",
-          "name": "",
           "parts": 5
         },
         {
           "color": "red",
-          "name": "",
           "parts": 1
         }
       ],
       "title": "Coke"
+    },
+    {
+      "id": 4,
+      "recipe": [
+        {
+          "color": "Blue",
+          "parts": 1
+        },
+        {
+          "color": "yellow",
+          "parts": 2
+        }
+      ],
+      "title": "Curacao"
     }
   ],
   "success": true
@@ -130,7 +133,7 @@ Navigate to the authorization tab, and update the type to Bearer Token and paste
 - General:
 	- Fetches a dictionary of questions in which the keys are the id and recipe.
 	- Request Arguments: None
-	- Returns: A list of drinks
+	- Returns: A list of drinks with complete description of recipe
 
 ```
 {
