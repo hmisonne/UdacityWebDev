@@ -19,6 +19,8 @@ Developers using this project should already have Python3, pip, Ionic and node i
 
 Starter code available on this [project repository](https://github.com/udacity/FSND/tree/master/projects/03_coffee_shop_full_stack/starter_code)
 
+### Authentification : Auth0
+This application is using Auth0. To setup a Auth0 account follow these [instructions](./backend/README.md)
 
 ## About the Stack
 
@@ -37,6 +39,7 @@ The application is run on `http://127.0.0.1:5000/` by default and is a proxy in 
 
 [View the README.md within ./backend for more details.](./backend/README.md)
 
+
 ### Frontend
 
 From the frontend folder, run the following commands to start the client: 
@@ -45,7 +48,15 @@ npm install // only once to install dependencies
 ionic serve
 ```
 
-By default, the frontend will run on localhost:3000. 
+By default, the frontend will run on `localhost:3000`. 
 
 
 [View the README.md within ./frontend for more details.](./frontend/README.md)
+
+## Deployment N/A
+
+## Authors
+Helene Misonne
+
+## Acknowledgements 
+I want to thank Udacity for providing the framework and guidelines for this great project.
