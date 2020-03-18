@@ -41,24 +41,15 @@ drink1 = {
 
 @app.route('/drinks', methods=['GET'])
 def get_all_drinks():
-    all_drink = Drink.query.all()
-
-    drinks =[drink.long() for drink in all_drink]
-    print(drinks)
-    return jsonify({
-        "success": True, 
-        "drinks": drinks})
-
-@app.route('/')
-def index():
-
-    # try:
-    # drink = Drink(title=drink1['title'],recipe=json.dumps(drink1['recipe']))
-    # drink.insert()
-    # print(drink)
-    # except:
-    #     print('abort')
-    return 'Hello'
+    try:
+        all_drink = Drink.query.all()
+        drinks =[drink.long() for drink in all_drink]
+        print(drinks)
+        return jsonify({
+            "success": True, 
+            "drinks": drinks})
+    except:
+            abort(422)
 
 '''
 @TODO implement endpoint
@@ -71,12 +62,14 @@ def index():
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_details(payload):
-    all_drink = Drink.query.all()
-    drinks =[drink.long() for drink in all_drink]
-    return jsonify({
-        "success": True, 
-        "drinks": drinks})
-
+    try:
+        all_drink = Drink.query.all()
+        drinks =[drink.long() for drink in all_drink]
+        return jsonify({
+            "success": True, 
+            "drinks": drinks})
+    except:
+        abort(422)
 '''
 @TODO implement endpoint
     POST /drinks
@@ -90,17 +83,22 @@ def get_drinks_details(payload):
 @requires_auth('post:drinks')
 def add_drink(payload):
     body = request.get_json()
-    print('body', body)
     new_title = body.get('title', None)
     new_recipe = body.get('recipe', None)
-    # try:
-    new_drink = Drink(title=new_title,recipe=json.dumps(new_recipe))
-    new_drink.insert()
-    return jsonify({
-        "success": True, 
-        "drinks": [new_drink.long()]})
-    # except:
-    #     abort(422)
+
+    duplicate = Drink.query.filter(title == new_drink).one_or_none()
+
+    if duplicate != None:
+        abort(400)
+
+    try:
+        new_drink = Drink(title=new_title,recipe=json.dumps(new_recipe))
+        new_drink.insert()
+        return jsonify({
+            "success": True, 
+            "drinks": [new_drink.long()]})
+    except:
+        abort(422)
 
 '''
 @TODO implement endpoint
@@ -122,20 +120,24 @@ def upate_drinks(token, drink_id):
         abort(404)
     
     body = request.get_json()
-    new_title = body.get('title', None)
-    new_recipe = body.get('recipe', None)
 
-    if new_title != None:
-        selected_drink.title = new_title
-    if new_recipe != None:
-        selected_drink.recipe = json.dumps(new_recipe)
-    
-    selected_drink.update()
-    drink = selected_drink.long()
-    return jsonify({
-        "success": True, 
-        "drinks": drink
-        })
+    try:
+        new_title = body.get('title', None)
+        new_recipe = body.get('recipe', None)
+
+        if new_title != None:
+            selected_drink.title = new_title
+        if new_recipe != None:
+            selected_drink.recipe = json.dumps(new_recipe)
+        
+        selected_drink.update()
+        drink = selected_drink.long()
+        return jsonify({
+            "success": True, 
+            "drinks": drink
+            })
+    except:
+        abort(422)
 
 '''
 @TODO implement endpoint
@@ -154,11 +156,14 @@ def delete_drinks(token, drink_id):
 
     if selected_drink == None:
         abort(404)
-    selected_drink.delete()
-    return jsonify({
-    "success": True, 
-    "delete": drink_id
-    })
+    try:
+        selected_drink.delete()
+        return jsonify({
+        "success": True, 
+        "delete": drink_id
+        })
+    except:
+        abort(422)
 ## Error Handling
 '''
 Example error handling for unprocessable entity
@@ -171,16 +176,6 @@ def unprocessable(error):
                     "message": "unprocessable"
                     }), 422
 
-'''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
-    each error handler should return (with approprate messages):
-             jsonify({
-                    "success": False, 
-                    "error": 404,
-                    "message": "resource not found"
-                    }), 404
-
-'''
 @app.errorhandler(404)
 def notfound(error):
     return jsonify({
@@ -188,11 +183,22 @@ def notfound(error):
                     "error": 404,
                     "message": "resource not found"
                     }), 404
-'''
-@TODO implement error handler for 404
-    error handler should conform to general task above 
-'''
 
+@app.errorhandler(500)
+def internal_server_error(error):
+    return jsonify({
+      "success": False,
+      "error": 500,
+      "message": "Internal Server Error"
+      }), 500
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+      "success": False,
+      "error": 400,
+      "message": "Bad request"
+      }), 400
 
 '''
 @TODO implement error handler for AuthError
