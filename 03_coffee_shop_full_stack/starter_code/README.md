@@ -2,34 +2,50 @@
 
 ## Full Stack Nano - IAM Final Project
 
-Udacity has decided to open a new digitally enabled cafe for students to order drinks, socialize, and study hard. But they need help setting up their menu experience.
+This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is to implement a restful API for a Digital Cafe App. This project is using Auth0 as a third-party authentication system to allow roles-based access control (RBAC).
 
-You have been called on to demonstrate your newly learned skills to create a full stack drink menu application. The application must:
+
+## App functionalities
 
 1) Display graphics representing the ratios of ingredients in each drink.
 2) Allow public users to view drink names and graphics.
 3) Allow the shop baristas to see the recipe information.
 4) Allow the shop managers to create new drinks and edit existing drinks.
 
-## Tasks
+## Getting started
 
-There are `@TODO` comments throughout the project. We recommend tackling the sections in order. Start by reading the READMEs in:
+### Pre-requisites and Local Development 
+Developers using this project should already have Python3, pip, Ionic and node installed on their local machines.
 
-1. [`./backend/`](./backend/README.md)
-2. [`./frontend/`](./frontend/README.md)
+Starter code available on this [project repository](https://github.com/udacity/FSND/tree/master/projects/03_coffee_shop_full_stack/starter_code)
+
 
 ## About the Stack
 
-We started the full stack application for you. It is desiged with some key functional areas:
-
 ### Backend
 
-The `./backend` directory contains a partially completed Flask server with a pre-written SQLAlchemy module to simplify your data needs. You will need to complete the required endpoints, configure, and integrate Auth0 for authentication.
+From the backend folder run `pip install requirements.txt`. All required packages are included in the requirements file. 
+
+To run the application run the following commands from within the `./src` directory: 
+```
+export FLASK_APP=api.py;
+flask run --reload
+```
+If running locally on Windows, look for the commands in the [Flask documentation](http://flask.pocoo.org/docs/1.0/tutorial/factory/).
+
+The application is run on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration. 
 
 [View the README.md within ./backend for more details.](./backend/README.md)
 
 ### Frontend
 
-The `./frontend` directory contains a complete Ionic frontend to consume the data from the Flask server. You will only need to update the environment variables found within (./frontend/src/environment/environment.ts) to reflect the Auth0 configuration details set up for the backend app. 
+From the frontend folder, run the following commands to start the client: 
+```
+npm install // only once to install dependencies
+ionic serve
+```
+
+By default, the frontend will run on localhost:3000. 
+
 
 [View the README.md within ./frontend for more details.](./frontend/README.md)
