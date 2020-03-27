@@ -1,0 +1,485 @@
+{
+	"info": {
+		"_postman_id": "df296c03-80f2-443a-a196-0c9443496074",
+		"name": "GoalTrackerAuth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c148fc7f-2272-4774-88f3-d0c7ad36913f",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/coaches",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "55aa6b12-cc73-4546-90be-a4b6cfaf951c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains coach array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.coaches).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/coaches",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"coaches"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/athletes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a11e088a-0f0a-48ed-b216-0d8bea3ffc67",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Vanessa\",\n\t\"goal\": \"Loose 5 kg\",\n\t\"weight\": \"40\",\n\t\"height\": \"170\",\n\t\"age\": \"30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/athletes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"athletes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/athletes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/athletes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"athletes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/coaches",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\" : \"Jason\",\n\t\"specialty\": \"Woman's Health\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/coaches",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"coaches"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "coach",
+			"item": [
+				{
+					"name": "/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ac84740-701e-4262-b319-c6568c1089b2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{coach_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d6bb364-61dd-4f73-9365-3a0d9639ee1c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{coach_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Go to the gym twice a week for 30 min\",\n    \"athlete_id\": 3,\n    \"start_date\":\"2020,1,1\",\n    \"end_date\":\"2020,12,12\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/objectives/2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{coach_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/objectives/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/athletes/3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{coach_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/athletes/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"athletes",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UTTJRVGsxT1VJME5rUTRRekZDUXpnM1FUUXlRMFEwUXpneE5UZERNVEl5TVVGRU1qVTFSZyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtaG0uYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTE2NzE0OTUxNTY0NTUxMDQ1NzI3IiwiYXVkIjpbImdvYWwiLCJodHRwczovL2ZzbmQtaG0uYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4NTE2ODY1NywiZXhwIjoxNTg1MTc1ODU3LCJhenAiOiJyanJ6VWtBeDFYNVJRbHRaeG1hS2MwU2NKWTBqUzBzMCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6W119.JMSWcJ1hVPwhaBX8Fgo5IkTxah1ZNoE4CKfSweqPHj5YcM1TEeUcwmdmi6z9MGFaSyt2STnywTmdgyk3-PVK34Ub2Op0yQZ0mHSQa5E7mosEniJj1BlpkONZ07fBxFYCZE1fukb9UulqhF3LLNlefXiBQd6kzybnq38Zwnj4E8X5unJgfpaTfvxKjXQ1RX9kqw5Jxsr9we2SXJCiLgRYyfQOc1DoqC_4Bo_GR1tZPciSEmx4ftpkF1o8ZK55RHnDA2bXRgMhCGVx40O_vONLEcNBcTAjsJ9UMdHP0fnyGRts-jQIB6GuZ3tJKVbrLLvbWFDYbCGfsDtFhNv458wbJA",
+						"type": "string"
+					}
+				]
+			},
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "athlete",
+			"item": [
+				{
+					"name": "/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d34114f9-4bbb-4a7f-a969-9b724dad6b26",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{athlete_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ed5887db-fc53-4dc3-9878-efb0bed9bf62",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{athlete_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/athletes/200/objectives",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5fff3a80-26d7-4aaa-b2b3-a4f503025f28",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{athlete_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/athletes/200/objectives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"athletes",
+								"200",
+								"objectives"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UTTJRVGsxT1VJME5rUTRRekZDUXpnM1FUUXlRMFEwUXpneE5UZERNVEl5TVVGRU1qVTFSZyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtaG0uYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlNzAxMzMzOTI5OGZiMGM5YzQ5NWJmNiIsImF1ZCI6ImdvYWwiLCJpYXQiOjE1ODUxNjg5MDAsImV4cCI6MTU4NTE3NjEwMCwiYXpwIjoicmpyelVrQXgxWDVSUWx0WnhtYUtjMFNjSlkwalMwczAiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDpvYmplY3RpdmVzIiwicGF0Y2g6b2JqZWN0aXZlcyJdfQ.QHuOxuuy1y1F9Ge8acZOWx_kb1BKlC7vfWM9qsdZhC0EPV_tURcZTZtXZwEuo6N42QjMpwBpdc_EttaCJN10Vl5LfsHymI9gPQvJO12RY0hXRbsR4nSrlDNQRP826fGEtt-Ud5LQ2XP6FmYYhRaBRwCF0ZJEm0L2C2vBogbyvKhzF7xuhDTZztLKbJExbrPGapkWWdF11yXmyHPgK0YpotTMUGgDTjEqv-lA8EtZRfMX0a1sVo3VJbSu8LhGhxFMoH5TLgeZWF5mi6ShS2mVHP6b6gFKlhLgdRrEVkHVN5C8xO546Du5N7CJmIcmH3k0_U4PVLgHFh_JNM-y6Zu5_g\n",
+						"type": "string"
+					}
+				]
+			},
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
