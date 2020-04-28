@@ -4,7 +4,7 @@
 
 This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is to build the data models to power the API endpoints for the Fyyur site by connecting to a PostgreSQL database for storing, querying, and creating information about artists and venues on Fyyur.
 
-!Fyyur Demo](demo/demo.gif)
+![Fyyur Demo](demo/demo.gif)
 
 ## App functionalities
 
