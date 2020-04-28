@@ -7,11 +7,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 
 # Connect to the database
+db_user = os.environ.get('DB_USER')
+db_password = os.environ.get('DB_PASS')
 
-
-# TODO IMPLEMENT DATABASE URL
-# SQLALCHEMY_DATABASE_URI = '<Put your local database url>'
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:noisette@localhost:5432/fyyurapp'
-
+database_name = "fyyurapp"
+SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(db_user, db_password,'localhost:5432', database_name)
 
 # Command Line: psql -U postgres fyyurapp
