@@ -16,5 +16,5 @@ Sets of projects using Python, Flask, SQLAlchemy and Postgresql.
 ### Project 4: Server Deployment and Containerization
 - Deploy the container to a Kubernetes cluster using Amazon EKS. Deployed your application live to the world (accessible by IP address). Use automated testing to prevent bad code from being deployed and monitor app’s performance using AWS tools
 
-### Project 4: Capstone project
+### Project 5: Capstone project
 - Construct a database-backed web API with user access control. Design and build out all of the API endpoints needed for the application. Secure API endpoints for use in any front end application (web or mobile).
