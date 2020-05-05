@@ -62,14 +62,12 @@ Then set up a test database add DB_USER and DB_PASS to your environment variable
 ```
 export DB_USER=<your_username>
 export DB_PASS=<your_password>
+export coach_token=<generated_token>
+export athlete_token=<generated_token>
 ```
 
-or replace the following fields on the models.py file
+or set your environment variables on windows.
 
-```
-db_user = <your_username>
-db_password = <your_password>
-```
 In order to run tests navigate to the backend folder and run the following commands: 
 
 ```
