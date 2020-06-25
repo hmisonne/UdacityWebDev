@@ -2,6 +2,8 @@
 
 Sets of projects using Python, Flask, SQLAlchemy and Postgresql.
 
+To see the details of this project, click on one of the folders above.
+
 ## Description of Projects:
 
 ### Project 1: Design a Venue Booking Database
