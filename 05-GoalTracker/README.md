@@ -98,9 +98,9 @@ To run the tests on the Heroku app, use the postman collection and run it with n
 
 ### Error Handling
 Errors are returned as JSON objects in the following format:
-```
+```json
 {
-    "success": False, 
+    "success": false, 
     "error": 400,
     "message": "Bad Request"
 }
@@ -136,7 +136,7 @@ There are currenly 2 roles:
 - Add new objective
 
 - Example of response for a request with following body: { "description": "Go to the gym twice a week for 30 min","athlete_id": 3,"start_date":"2020,1,1","end_date":"2020,12,12" } and the appropriate header:
-```
+```json
 {
   "objective": {
     "completed": false,
@@ -157,7 +157,7 @@ There are currenly 2 roles:
 
 - View all objectives
 
-```
+```json
 {
   "objectives": [
     {
@@ -182,7 +182,7 @@ There are currenly 2 roles:
 
 - Example of response for a request with following body: {"description": "Test"} and the appropriate header:
 
-```
+```json
 {
   "objective": {
     "completed": false,
@@ -204,7 +204,7 @@ There are currenly 2 roles:
 - Add a new athlete
 - Sample:`curl -X POST -H "Content-Type: application/json" -d "{\"name\":\"Vanessa\",\"goal\": \"Loose 5 kg\",\"weight\": \"40\",\"height\": \"170\",\"age\": \"30\"}"  http://127.0.0.1:5000/athletes`
 
-```
+```json
 {
     "athlete": {
         "id": 4,
@@ -220,7 +220,7 @@ There are currenly 2 roles:
 - Get the list of all athletes
 - Sample:`curl -X GET http://127.0.0.1:5000/athletes`
 
-```
+```json
 {
     "athletes": [
         {
@@ -278,7 +278,7 @@ There are currenly 2 roles:
 - Delete athlete based on his id
 - Sample of response for id = 4
 
-```
+```json
 {
     "athlete_deleted": "4",
     "success": true
