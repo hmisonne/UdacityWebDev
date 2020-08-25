@@ -2,7 +2,12 @@
 
 ## Introduction
 
-This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is to build the data models to power the API endpoints for the Fyyur site by connecting to a PostgreSQL database for storing, querying, and creating information about artists and venues on Fyyur.
+This project is part of the Udacity Full Stack Developer Nano Degree. The goal of this project is to:
+- Connect a web app to a PostgreSQL database (local connection)
+- Implement data models in relational, normalized form.
+  - Create models using SQLAlchemy syntax: Artists, Shows, Venues  with the proper attributes, constraints and relationship to satisfy the needs of this application. 
+- Use SQL to select records, create records and conduct joined queries.
+- Create a web app that builds successfully and runs without errors
 
 ![Fyyur Demo](demo/demo.gif)
 
