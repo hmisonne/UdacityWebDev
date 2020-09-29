@@ -1,10 +1,8 @@
-# Full Stack API Final Project
+# GoalTracker API 
 
-## Full Stack GoalTracker
+This is the final project of the Udacity Full Stack Developer Nano Degree. The goal of this project is to deploy a Flask application with Heroku/PostgreSQL and enable Role Based Authentication and roles-based access control (RBAC) with Auth0 (third-party authentication systems). 
 
-This project is the final project of the Udacity Full Stack Developer Nano Degree. The goal of this project is to deploy a Flask application with Heroku/PostgreSQL and enable Role Based Authentication and roles-based access control git (RBAC) with Auth0 (third-party authentication systems). 
-
-I decided to implement a RESTful for a GoalTracker app where coaches can assign objectives to athlete and athlete can monitor their progress.
+I decided to implement a RESTful for a GoalTracker app where coaches can assign objectives to athletes and athletes can monitor their progress.
 
 ## Getting started
 
@@ -32,7 +30,7 @@ From the backend folder run `pip install requirements.txt`. All required package
 
 The PostgreSQL database is hosted on Heroku.
 
-To run the application on your local machine, run the following commands from the GoalTracker foler: 
+To run the application on your local machine, run the following commands from the GoalTracker folder: 
 ```
 set FLASK_APP=app.py
 set FLASK_ENV=development
@@ -44,7 +42,7 @@ The application is running on `https://goaltrackerhm.herokuapp.com/` and can als
 
 ### Frontend
 
-Work in Progress
+Not currently available
 
 ### Authentification set-up:
 
