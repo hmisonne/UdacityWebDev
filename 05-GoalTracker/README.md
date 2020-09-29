@@ -47,8 +47,8 @@ Update the `conf_settings.env` file with the new COACH_TOKEN and your own Postgr
 ```
 export DB_USER=<your_username>
 export DB_PASS=<your_password>
-export coach_token=<generated_token>
-export athlete_token=<generated_token>
+export COACH_TOKEN=<generated_token>
+export ATHLETE_TOKEN=<generated_token>
 ```
 
 or set your environment variables on windows.
