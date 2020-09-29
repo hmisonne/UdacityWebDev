@@ -10,15 +10,7 @@ I decided to implement a RESTful for a GoalTracker app where coaches can assign 
 
 Developers using this project should already have Python3, pip and node installed on their local machines.
 
-To create a virtual environment on Windows:
-```
-py -m venv env
-```
-To activate it:
-```
-.\env\Scripts\activate
-```
-If running locally on macOS and Linux, look for the commands in the [Python documentation](
+To run this project, create and activate a virtual environment following the commands described in the [Python documentation](
 https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 
@@ -26,7 +18,7 @@ https://packaging.python.org/guides/installing-using-pip-and-virtual-environment
 
 ### Backend
 
-From the backend folder run `pip install requirements.txt`. All required packages are included in the requirements file. 
+From the virtual environment, run `pip install -r requirements.txt`. All required packages are included in the requirements file. 
 
 The PostgreSQL database is hosted on Heroku.
 
@@ -44,18 +36,13 @@ The application is running on `https://goaltrackerhm.herokuapp.com/` and can als
 
 Not currently available
 
-### Authentification set-up:
-
-All required configuration settings are on conf_settings.env
-Run these commands in your terminal to update your environment variables
-
-If the token expired, run the `auth/token_generator.py` file to generate a new token for the Coach role.
-
 ### Tests
 
 To run the tests locally, make sure you have PostgreSQL installed, [PostgreSQL install documentation](https://www.postgresql.org/)
 
-Then set up a test database add DB_USER and DB_PASS to your environment variable
+To generate a new token for the Coach role (COACH_TOKEN), run the `auth/token_generator.py` file.
+
+Update the `conf_settings.env` file with the new COACH_TOKEN and your own PostgreSQL DB_USER and DB_PASS. Then import the environment variables.
 
 ```
 export DB_USER=<your_username>
