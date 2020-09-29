@@ -2,7 +2,7 @@ import http.client
 
 conn = http.client.HTTPSConnection("fsnd-hm.auth0.com")
 
-payload = "{\"client_id\":\"Tnl5GBx1UPP4xf16D3RtQKW0cRrq1FJf\",\"client_secret\":\"0w2TbO1lxnm_8N7nAyQBOXnKTOABHIkzbprrG1nBl8vExzgY9v1E9yQqKamxTfEZ\",\"audience\":\"goal\",\"grant_type\":\"client_credentials\"}"
+payload = "{\"client_id\":\"y4qZ9TR8IUsvfc2SbjUz7wvUJqxRaV1C\",\"client_secret\":\"okNHXuIa9ZOyv9NIimoXJB22D-a_6BucOO6qP-XmLN_fkQvAsK81aGSm1Te0qg2m\",\"audience\":\"goal\",\"grant_type\":\"client_credentials\"}"
 
 headers = { 'content-type': "application/json" }
 
