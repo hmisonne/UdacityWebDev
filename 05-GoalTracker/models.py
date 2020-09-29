@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os 
 
-database_path = os.environ['DATABASE_URL']
+# database_path = os.environ['DATABASE_URL']
+database_path = "postgres://wpbssdctqaeauj:1693d804b25297be86399d8a377f4e4f8b3cca65741f2cedb1b36b845ce96814@ec2-184-72-235-159.compute-1.amazonaws.com:5432/dognivnlt5ab9"
 db = SQLAlchemy()
 
 '''
